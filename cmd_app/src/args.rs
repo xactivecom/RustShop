@@ -1,112 +1,149 @@
+use regex::Regex;
+
 use clap::{
-    Args,
+    // Args,
     Parser,
     Subcommand,
+    ValueEnum,
 };
+use clap::error::{ Error, ErrorKind };
 
 #[derive(Parser, Debug)]
 #[clap(version, about)]
 pub struct CmdAppArgs {
     /// The entity argument
     #[clap(subcommand)]
-    pub entity_type: EntityType,
+    pub command_type: CommandType,
 }
 
 #[derive(Subcommand, Debug)]
-pub enum EntityType {
-    /// Create, update, delete or show users
-    User(UserCommand),
+pub enum CommandType {
+    /// Collect data from external API to local files
+    Collect(CollectArgs),
 
-    /// Create, update, delete or show videos
-    Video(VideoCommand),
+    /// Load local data into the database
+    Load(LoadArgs),
 }
 
-#[derive(Args, Debug)]
-pub struct UserCommand {
-    #[clap(subcommand)]
-    pub command: UserSubcommand,
+
+// ----- Common -----
+
+#[derive(Copy, Clone, PartialEq, Eq, ValueEnum, Debug)]
+#[clap(rename_all = "lower")]
+pub enum SourceType {
+    Nhl,
+    SportRadar,
 }
 
-#[derive(Subcommand, Debug)]
-pub enum UserSubcommand {
-    /// Create a user
-    Create(CreateUser),
-
-    /// Update a user
-    Update(UpdateUser),
-
-    /// Delete a user
-    Delete(DeleteEntity),
-
-    /// Show all users
-    Show,
+// Validate season single or range formats
+fn validate_season(s: &str) -> Result<String, Error> {
+    let re = Regex::new(r"^\d{8}|\d{8}:\d{8}$").unwrap();
+    if re.is_match(s) {
+        Ok(s.to_string())
+    } else {
+        Err(Error::raw(
+            ErrorKind::ValueValidation,
+            "season must be format YYY1YYY2 or YYY1YYY2:YYY3YYY4"
+        ))
+    }
 }
 
-#[derive(Debug, Args)]
-pub struct CreateUser {
-    /// The name of the user
-    pub name: String,
 
-    /// The email of the user
-    pub email: String,
+// ----- Collect -----
+
+#[derive(Parser, Debug)]
+pub struct CollectArgs {
+    /// The external API source
+    #[arg(long, value_enum)]
+    pub source: SourceType,
+
+    // The data entity to collect
+    #[arg(long, value_enum)]
+    pub entity: CollectEntityType,
+
+    // Season of entity to collect
+    #[arg(long, value_parser = validate_season)]
+    pub season: Option<String>,
+
+    // Team of entity to collect
+    #[arg(long)]
+    pub team: Option<String>,
 }
 
-#[derive(Debug, Args)]
-pub struct UpdateUser {
-    /// The id of the user to update
-    pub id: i32,
-
-    /// The name of the user
-    pub name: String,
-
-    /// The email of the user
-    pub email: String,
+#[derive(Copy, Clone, PartialEq, Eq, ValueEnum, Debug)]
+#[clap(rename_all = "lower")]
+pub enum CollectEntityType {
+    TeamImage,
+    TeamSeason,
+    Roster,
+    Player,
 }
 
-#[derive(Debug, Args)]
-pub struct DeleteEntity {
-    /// The id of the entity to delete
-    pub id: i32,
+impl CollectArgs {
+    // Post-parse validation
+    pub fn validate(self) -> Result<Self, Error> {
+        let season_entities = [
+            CollectEntityType::TeamImage, 
+            CollectEntityType::TeamSeason, 
+            CollectEntityType::Roster,
+        ];
+        if season_entities.contains(&self.entity) && self.season.is_none() {
+            Err(Error::raw(
+                ErrorKind::MissingRequiredArgument,
+                format!("entity {:?} requires a season argument\n", self.entity)
+            ))
+        } else {
+             Ok(self)
+        }
+    }
 }
 
-#[derive(Debug, Args)]
-pub struct VideoCommand {
-    #[clap(subcommand)]
-    pub command: VideoSubcommand,
+
+// ----- Load -----
+
+#[derive(Parser, Debug)]
+pub struct LoadArgs {
+    /// The source local data
+    #[arg(long, value_enum)]
+    pub source: SourceType,
+
+    // The data entity to load
+    #[arg(long, value_enum)]
+    pub entity: LoadEntityType,
+
+    // Season of entity to load
+    #[arg(long, value_parser = validate_season)]
+    pub season: Option<String>,
+
+    // Team of entity to load
+    #[arg(long)]
+    pub team: Option<String>,
 }
 
-#[derive(Debug, Subcommand)]
-pub enum VideoSubcommand {
-    /// Create a new video
-    Create(CreateVideo),
-
-    /// Update an existing video
-    Update(UpdateVideo),
-
-    /// Delete a video
-    Delete(DeleteEntity),
-
-    /// Show all videos
-    Show,
+#[derive(Copy, Clone, PartialEq, Eq, ValueEnum, Debug)]
+#[clap(rename_all = "lower")]
+pub enum LoadEntityType {
+    League,
+    Season,
+    Team,
+    Roster,
+    Player,
 }
 
-#[derive(Debug, Args)]
-pub struct CreateVideo {
-    /// The title of the video to create
-    pub title: String,
-
-    /// The description of the video to create
-    pub description: String,
-}
-
-#[derive(Debug, Args)]
-pub struct UpdateVideo {
-    /// The id of the video to update
-    pub id: i32,
-
-    /// The title of the video
-    pub title: String,
-
-    /// The description of the video
-    pub description: String,
+impl LoadArgs {
+    // Post-parse validation
+    pub fn validate(self) -> Result<Self, Error> {
+        let season_entities = [
+            LoadEntityType::Team, 
+            LoadEntityType::Roster,
+        ];
+        if season_entities.contains(&self.entity) && self.season.is_none() {
+            Err(Error::raw(
+                ErrorKind::MissingRequiredArgument,
+                format!("entity {:?} requires a season argument\n", self.entity)
+            ))
+        } else {
+             Ok(self)
+        }
+    }
 }

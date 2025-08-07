@@ -3,18 +3,37 @@ mod ops;
 
 use clap::Parser;
 
-use args::EntityType;
-use args::CmdAppArgs;
-use ops::user_ops::handle_user_command;
-use ops::user_ops::handle_video_command;
+use args::{ CmdAppArgs, CommandType, CollectArgs, LoadArgs };
+use ops::collect_ops::handle_collect_command;
+use ops::load_ops::handle_load_command;
 
 fn main() {
     // Parse command-line
     let args:CmdAppArgs = CmdAppArgs::parse();
 
     // Invoke appropriate handler 
-    match args.entity_type {
-        EntityType::User(user) => handle_user_command(user),
-        EntityType::Video(video) => handle_video_command(video),
+    match args.command_type {
+        CommandType::Collect(args) => {
+            match CollectArgs::validate(args) {
+                Ok(valid_args) => {
+                    handle_collect_command(valid_args);
+                }
+                Err(e) => {
+                    e.print().expect("Failed to print validation error");
+                    std::process::exit(1);
+                }
+            }
+        }
+        CommandType::Load(args) => {
+            match LoadArgs::validate(args) {
+                Ok(valid_args) => {
+                    handle_load_command(valid_args);
+                }
+                Err(e) => {
+                    e.print().expect("Failed to print validation error");
+                    std::process::exit(1);
+                }
+            }
+        }
     };
 }
