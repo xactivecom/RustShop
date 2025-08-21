@@ -3,7 +3,7 @@ name = "cmd_app"
 version = "0.1.0"
 edition = "2024"
 authors = ["Stuart Thompson"]
-description = "A CLI interface to data collector"
+description = "A CLI interface to data collector and loader"
 
 [dependencies]
 clap = { version = "4.5.42", features = ["derive"] }

@@ -13,6 +13,7 @@ fn main() {
 
     // Invoke appropriate handler 
     match args.command_type {
+        // Demonstrate collect data
         CommandType::Collect(args) => {
             match CollectArgs::validate(args) {
                 Ok(valid_args) => {
@@ -24,6 +25,7 @@ fn main() {
                 }
             }
         }
+        // Demonstrate load data
         CommandType::Load(args) => {
             match LoadArgs::validate(args) {
                 Ok(valid_args) => {
