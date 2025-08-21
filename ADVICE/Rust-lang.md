@@ -1,4 +1,4 @@
-# Rust Language Advise
+# General Rust Language Advise
 
 These are **Rust** language recommendations to follow during product development.
 
