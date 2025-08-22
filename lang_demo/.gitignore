@@ -1,0 +1,6 @@
+# Local Mac OS
+**/.DS_Store
+
+# Distribution / packaging
+/target/
+
