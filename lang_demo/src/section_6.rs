@@ -38,13 +38,13 @@ impl Overview for AdvancedCourse {
 
 // Generic trait parameter
 fn call_overview<T: Overview>(item: &T) {
-    println!("Overview: {}", item.overview())
+    println!("Overview: {}", item.overview());
 }
 
 // Utility traits
 impl Drop for Course {
     fn drop(&mut self) {
-        println!("drop {}", self.author)
+        println!("drop {}", self.author);
     }
 }
 
@@ -66,6 +66,53 @@ impl<T> Add for Coord<T>
             }
         }
     }
+
+// Assignment 6
+trait Vehicular {
+    fn set_mpg(&mut self, mpg: u16);
+    fn set_color(&mut self, color: String);
+    fn set_top_speed(&mut self, top_speed: u16);
+}
+
+struct Car {
+    mpg: u16,
+    color: String,
+    top_speed: u16,
+}
+
+impl Vehicular for Car {
+    fn set_mpg(&mut self, mpg: u16) {
+        self.mpg = mpg;
+    }
+    fn set_color(&mut self, color: String) {
+        self.color = color;
+    }
+    fn set_top_speed(&mut self, top_speed: u16) {
+        self.top_speed = top_speed;
+    }
+}
+
+struct Motorcycle {
+    mpg: u16,
+    color: String,
+    top_speed: u16,
+}
+
+impl Vehicular for Motorcycle {
+    fn set_mpg(&mut self, mpg: u16) {
+        self.mpg = mpg;
+    }
+    fn set_color(&mut self, color: String) {
+        self.color = color;
+    }
+    fn set_top_speed(&mut self, top_speed: u16) {
+        self.top_speed = top_speed;
+    }
+}
+
+fn print_debug<T: std::fmt::Debug>(value: T) {
+    println!("Debug: {:?}", value);
+}
 
 pub fn run_lesson() {
     println!("\nSection 6:");
@@ -91,4 +138,23 @@ pub fn run_lesson() {
     let coord_2 = Coord{ x: 1.6, y: -1.2 };
     let sum = coord_1 + coord_2;
     println!("x:{}, y:{}", sum.x, sum.y);
+
+    // Assignment 6
+    let mut car = Car{ mpg: 350, color: String::from("white"), top_speed: 160 };
+    println!("mpg:{}, color:{}, top_speed:{}", car.mpg, car.color, car.top_speed);
+    car.set_mpg(370);
+    car.set_color(String::from("blue"));
+    car.set_top_speed(180);
+    println!("mpg:{}, color:{}, top_speed:{}", car.mpg, car.color, car.top_speed);
+
+    let mut motorcycle = Motorcycle{ mpg: 600, color: String::from("white"), top_speed: 160 };
+    println!("mpg:{}, color:{}, top_speed:{}", motorcycle.mpg, motorcycle.color, motorcycle.top_speed);
+    motorcycle.set_mpg(650);
+    motorcycle.set_color(String::from("blue"));
+    motorcycle.set_top_speed(180);
+    println!("mpg:{}, color:{}, top_speed:{}", motorcycle.mpg, motorcycle.color, motorcycle.top_speed);
+
+    print_debug("Hello again");
+    print_debug(3.14159);
+    print_debug(vec![2, 3, 5, 8, 13]);
 }

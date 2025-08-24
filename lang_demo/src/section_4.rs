@@ -52,6 +52,7 @@ struct LifeString<'a> {
     name: &'a str,
 }
 
+// Assignment 4
 struct Car {
     mpg: u32,
     color: String,
