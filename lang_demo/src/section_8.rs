@@ -4,6 +4,7 @@
 
 use std::collections::BinaryHeap;
 use std::collections::HashMap;
+use std::collections::HashSet;
 
 pub fn run_lesson() {
     println!("\nSection 8:");
@@ -46,10 +47,48 @@ pub fn run_lesson() {
     map_1.insert("last", 99);
     println!("map_1: {:?}", map_1);
     println!("mid: {:?}", map_1["mid"]);
+
     let first = map_1.remove_entry("first");
     println!("map_1: {:?}, removed {:?}", map_1, first);
     println!("is empty:{}, len:{}", map_1.is_empty(), map_1.len());
 
     // BtreeMap data is stored in an inverted tree
 
+    // HashSet data is stored in single heap
+    let mut set_1 = HashSet::new();
+    set_1.insert("first");
+    set_1.insert("mid");
+    set_1.insert("last");
+    println!("set_1: {:?}", set_1);
+
+    let first = set_1.remove("first");
+    println!("set_1: {:?}, removed {:?}", set_1, first);
+    println!("is empty:{}, len:{}", set_1.is_empty(), set_1.len());
+
+    // Set operations
+    let mut set_2 = HashSet::new();
+    set_2.insert("first");
+    set_2.insert("mid");
+    set_2.insert("last");
+
+    let set_x = &set_1 & &set_2; // intersection
+    print!("intersection:");
+    for x in set_x {
+        print!(" {}", x);
+    }
+    println!();
+
+    print!("union: ");
+    let set_u = &set_1 | &set_2; // union
+    for u in set_u {
+        print!(" {}", u);
+    }
+    println!();
+
+    print!("difference: ");
+    let set_d = &set_1 ^ &set_2; // difference
+    for d in set_d {
+        print!(" {}", d);
+    }
+    println!();
 }
