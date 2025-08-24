@@ -2,6 +2,7 @@ mod section_2;
 mod section_3;
 mod section_4;
 mod section_5;
+mod section_6;
 
 fn main() {
     // Course section 2
@@ -14,5 +15,8 @@ fn main() {
     // section_4::run_lesson();
 
     // Course Section 5
-    section_5::run_lesson();
+    // section_5::run_lesson();
+
+    // Course Section 6
+    section_6::run_lesson();
 }

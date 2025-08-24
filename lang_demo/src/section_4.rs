@@ -77,10 +77,10 @@ pub fn run_lesson() {
     println!("x:{}, y:{}", coord.0, coord.1);
 
     // Field-named struct
-    let user1 = User{active: true, name: String::from("Tyler"), count: 0};
+    let user1 = User{ active: true, name: String::from("Tyler"), count: 0 };
     println!("active:{}, name:{}, count:{}", user1.active, user1.name, user1.count);
 
-    let mut obj = Square{width: 2, height:4};
+    let mut obj = Square{ width: 2, height:4 };
     println!("area:{}", obj.area());
     obj.set_height(3);
     obj.set_width(4);
@@ -105,7 +105,7 @@ pub fn run_lesson() {
     let always_str: &'static str = "text is forever";
     println!("always {}", always_str);
 
-    // Assign 4
+    // Assignment 4
     let mut car = Car{mpg: 350, color: String::from("white"), top_speed: 160};
     println!("mpg:{}, color:{}, top_speed:{}", car.mpg, car.color, car.top_speed);
     car.set_mpg(370);
