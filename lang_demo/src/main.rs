@@ -8,6 +8,8 @@ mod section_6;
 mod section_8;
 mod section_9;
 mod section_11;
+mod section_12;
+mod section_13;
 
 fn main() {
     // Course section 2
@@ -34,6 +36,12 @@ fn main() {
     // section_9::run_lesson();
 
     // Course Section 11
-    // Usage: target_string replacement_string input_file output_file
-    section_11::run_lesson();
+    // Example: cargo run "This is" "Wow" test_11.txt out_11.txt
+    // section_11::run_lesson();
+
+    // Course Section 12
+    // section_12::run_lesson();
+
+    // Course Section 13
+    section_13::run_lesson();
 }
