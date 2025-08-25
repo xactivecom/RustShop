@@ -1,6 +1,7 @@
 ///////////////////////////////
 // Course Section 2
 ///////////////////////////////
+#[allow(dead_code)]
 
 fn test_array() {
     // Basic array

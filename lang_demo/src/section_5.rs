@@ -12,7 +12,6 @@ impl Fish {
             Fish::Cod => "cod",
             Fish::Salmon => "salmon",
             Fish::Tuna => "tuna",
-            _ => "unknown",
         }
     }
 }
@@ -36,20 +35,20 @@ fn optional_add_one(x: Option<i32>) -> Option<i32> {
 
 // Assignment 5
 enum Shape {
-    triangle, square, pentagon, octagon
+    Triangle, Square, Pentagon, Octagon
 }
 impl Shape {
     fn corners(self) -> i32 {
         match self {
-            Shape::triangle => 3,
-            Shape::square => 4,
-            Shape::pentagon => 5,
-            Shape::octagon => 8,
-            _ => 0,
+            Shape::Triangle => 3,
+            Shape::Square => 4,
+            Shape::Pentagon => 5,
+            Shape::Octagon => 8,
         }
     }
 }
 
+#[allow(unused_variables)]
 pub fn run_lesson() {
     println!("\nSection 5:");
 
@@ -78,8 +77,8 @@ pub fn run_lesson() {
     assert_eq!(res_x_1, Some(6));
 
     // Assignment 5
-    println!("triangle {}", Shape::triangle.corners());
-    println!("square {}", Shape::square.corners());
-    println!("pentagon {}", Shape::pentagon.corners());
-    println!("octagon {}", Shape::octagon.corners());
+    println!("triangle {}", Shape::Triangle.corners());
+    println!("square {}", Shape::Square.corners());
+    println!("pentagon {}", Shape::Pentagon.corners());
+    println!("octagon {}", Shape::Octagon.corners());
 }
