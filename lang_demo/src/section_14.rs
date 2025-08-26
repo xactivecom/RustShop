@@ -4,6 +4,10 @@
 
 use std::thread;
 use std::sync::{mpsc, Arc, Mutex};
+use std::time::Instant;
+
+use rayon::prelude::*;
+use num::{ one, BigUint, One };
 
 fn single_producer() {
     let treasure_msg = String::from("treasure");
@@ -101,6 +105,40 @@ fn shared_state() {
     println!("count:{}", counter.lock().unwrap());
 }
 
+// Compute factorial
+fn factorial(num: u32) -> BigUint {
+    if num == 0 || num == 1 {
+        return BigUint::one()
+    }
+    // Reduce takes an accumulator
+    (1..=num).map(BigUint::from).reduce(|acc, x| acc * x).unwrap()
+}
+
+// Compute factorial in parallel
+fn multi_factorial(num: u32) -> BigUint {
+    if num == 0 || num == 1 {
+        return BigUint::one()
+    }
+    // The identity iterator parameter is BigUint::one()
+    (1..=num).into_par_iter().map(BigUint::from).reduce(|| BigUint::one(), |acc, x| acc * x)
+}
+
+fn fib_recursive(n: u32) -> u32 {
+    if n < 2 {
+        return n
+    }
+    fib_recursive(n - 1) + fib_recursive(n - 2)
+}
+
+fn fibonacci_join(n: u32) -> u32 {
+    if n < 2 {
+        return n
+    }
+    let (n_1, n_2) = rayon::join(|| fib_recursive(n - 1),
+        || fib_recursive(n - 2));
+    n_1 + n_2
+}
+
 pub fn run_lesson() {
     println!("\nSection 14:");
 
@@ -141,4 +179,27 @@ pub fn run_lesson() {
     // Concurrency
     shared_state();
 
+    // Rayon testing
+    let timer_1 = Instant::now();
+    let ans_1 = factorial(30000);
+    let time_1 = timer_1.elapsed();
+    println!("single factorial time:{:?}", time_1);
+
+    let timer_2 = Instant::now();
+    let ans_2 = multi_factorial(30000);
+    let time_2 = timer_2.elapsed();
+    println!("multi factorial time:{:?}", time_2);
+
+    // Assignment 14
+    let timer_3 = Instant::now();
+    let ans_3 = fib_recursive(47);
+    println!("ans {}", ans_3);
+    let time_3 = timer_3.elapsed();
+    println!("fib recursive:{:?}", time_3);
+
+    let timer_4 = Instant::now();
+    let ans_4 = fibonacci_join(47);
+    println!("ans {}", ans_4);
+    let time_4 = timer_4.elapsed();
+    println!("fib recursive:{:?}", time_4);
 }
