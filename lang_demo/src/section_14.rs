@@ -3,7 +3,7 @@
 ///////////////////////////////
 
 use std::thread;
-use std::sync::mpsc;
+use std::sync::{mpsc, Arc, Mutex};
 
 fn single_producer() {
     let treasure_msg = String::from("treasure");
@@ -79,6 +79,28 @@ fn sync_channel() {
     }
 }
 
+fn shared_state() {
+    // Initialize atomic counter
+    let counter = Arc::new(Mutex::new(0));
+
+    // Create threads and increment count
+    let mut handles = vec![];
+    for _ in 0..5 {
+        let counter = Arc::clone(&counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    // Wait for threads
+    for handle in handles {
+        handle.join().unwrap();
+    }
+    println!("count:{}", counter.lock().unwrap());
+}
+
 pub fn run_lesson() {
     println!("\nSection 14:");
 
@@ -109,10 +131,14 @@ pub fn run_lesson() {
     }
     println!("main done waiting for all threads");
 
+    // Multithread examples
     single_producer();
-
     multiple_producers();
 
+    // Thread communication
     sync_channel();
+
+    // Concurrency
+    shared_state();
 
 }
