@@ -7,7 +7,7 @@ use std::sync::{mpsc, Arc, Mutex};
 use std::time::Instant;
 
 use rayon::prelude::*;
-use num::{ one, BigUint, One };
+use num::{ BigUint, One };
 
 fn single_producer() {
     let treasure_msg = String::from("treasure");
@@ -181,12 +181,12 @@ pub fn run_lesson() {
 
     // Rayon testing
     let timer_1 = Instant::now();
-    let ans_1 = factorial(30000);
+    factorial(30000);
     let time_1 = timer_1.elapsed();
     println!("single factorial time:{:?}", time_1);
 
     let timer_2 = Instant::now();
-    let ans_2 = multi_factorial(30000);
+    multi_factorial(30000);
     let time_2 = timer_2.elapsed();
     println!("multi factorial time:{:?}", time_2);
 
