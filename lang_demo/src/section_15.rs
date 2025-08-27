@@ -41,7 +41,7 @@ macro_rules! average{
     ) => {
         // Use inner block so variable can be defined
         {
-            let count = 0usize $(+ { let _ = stringify!($val); 1})*;
+            let count = 0usize $(+ { let _ = stringify!($val); 1 })*;
             let sum = 0.0 $(+ $val as f64)*;
             sum / count as f64
         }
@@ -52,6 +52,24 @@ macro_rules! average{
 fn test_debug_macro() {
     // The debug_print macro should output:
     // "Test debug_print procedural macro"
+}
+
+// Assignment macro
+macro_rules! op{
+    (
+        $n1:expr, $n2:expr, $fn:expr
+    ) => {
+        {
+            match $fn {
+                1 => $n1 + $n2,
+                2 => $n1 - $n2,
+                3 => $n1 * $n2,
+                4 => $n1 / $n2,
+                5 => $n1 % $n2,
+                _ => -1,
+            }
+        }
+    };
 }
 
 pub fn run_lesson() {
@@ -72,4 +90,14 @@ pub fn run_lesson() {
 
     // Test debug_print procedural macro
     test_debug_macro();
+
+    // Assignment 15
+    println!("{}", op!(5, 2, 1));
+    println!("{}", op!(5, 2, 2));
+    println!("{}", op!(5, 2, 3));
+    println!("{}", op!(5, 2, 4));
+    println!("{}", op!(5, 2, 5));
+    println!("{}", op!(5, 2, 6));
+
+
 }
