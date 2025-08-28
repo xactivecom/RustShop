@@ -9,3 +9,4 @@ num = "0.4"
 regex = "1"
 text-colorizer = "1"
 macros = { path = "../macros" }
+async-std = "1"
