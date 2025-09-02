@@ -88,17 +88,20 @@ where
     pub fn search(&self, value: &T) -> bool {
         match &self.value {
             Some(key) => {
+                // Compare tree key to value
                 match key.cmp(value) {
                     Ordering::Equal => {
                         true
                     },
                     Ordering::Greater => {
+                        // Recursively traverse left to smaller value
                         match &self.left {
                             Some(node) => node.search(value),
                             None => false,
                         }
                     },
                     Ordering::Less => {
+                        // Recursively traverse right to larger value
                         match &self.right {
                             Some(node) => node.search(value),
                             None => false,
@@ -127,8 +130,75 @@ where
             None => self.value.as_ref(),
         }
     }
-}
 
+    // Retrieve the largest value which is smaller than the specified value
+    pub fn floor(&self, value: &T) -> Option<&T> {
+        match &self.value {
+            Some(key) => {
+                // Compare tree key to value
+                match key.cmp(value) {
+                    Ordering::Greater => {
+                        // If key is too large, recursively traverse left to smaller value
+                        match &self.left {
+                            Some(node) => node.floor(value),
+                            None => None,
+                        }
+                    },
+                    Ordering::Less => {
+                        // If key is too small recursively traverse right to larger value
+                        match &self.right {
+                            Some(node) => {
+                                let val = node.floor(value);
+                                // If value if valid, return it, otherwise return the key
+                                match val {
+                                    Some(_) => val,
+                                    None => Some(key),
+                                }
+                            },
+                            None => Some(key),
+                        }
+                    },
+                    Ordering::Equal => Some(key)
+                }
+            },
+            None => None,
+        }
+    }
+
+    // Retrieve the smallest value which is greater than the specified value
+    pub fn ceil(&self, value: &T) -> Option<&T> {
+        match &self.value {
+            Some(key) => {
+                // Compare tree key to value
+                match key.cmp(value) {
+                    Ordering::Less => {
+                        // If key is too small, recursively traverse right to greater value
+                        match &self.right {
+                            Some(node) => node.ceil(value),
+                            None => None,
+                        }
+                    },
+                    Ordering::Greater => {
+                        // If key is too large recursively traverse left to smaller value
+                        match &self.left {
+                            Some(node) => {
+                                let val = node.ceil(value);
+                                // If value if valid, return it, otherwise return the key
+                                match val {
+                                    Some(_) => val,
+                                    None => Some(key),
+                                }
+                            },
+                            None => Some(key),
+                        }
+                    },
+                    Ordering::Equal => Some(key)
+                }
+            },
+            None => None,
+        }
+    }
+}
 // Declare binary search tree iterator
 struct BinarySearchTreeIter<'a, T>
 where
@@ -213,5 +283,11 @@ pub fn run_lesson() {
     // Test minimum, maximum
     assert_eq!(int_tree.minimum(), Some(&-5));
     assert_eq!(int_tree.maximum(), Some(&42));
+
+    // Test floor, ceil
+    assert_eq!(int_tree.floor(&26).unwrap(), &25);
+    assert_eq!(int_tree.floor(&0).unwrap(), &-5);
+    assert_eq!(int_tree.ceil(&0).unwrap(), &1);
+    assert_eq!(int_tree.ceil(&20).unwrap(), &25);
 
 }
