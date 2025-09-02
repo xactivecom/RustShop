@@ -2,6 +2,7 @@
 // Course Section 24
 ///////////////////////////////
 
+use std::{ cmp::Ordering, ops::Deref };
 
 // A binary search tree (BST) has these properties:
 // - the left subtree has values less than the curent node
@@ -42,47 +43,93 @@ where
         }
     }
 
-    // Insert a new value into the BST
+    // Insert a new value into the tree
     pub fn insert(&mut self, value: T) {
         if self.value.is_none() {
             // Simple set if root node
             self.value = Some(value)
         } else {
-            // Insert into proper order
+            // Insert value in proper order (smaller to left, otherwise right)
             match &self.value {
                 None => (),
                 Some(key) => {
-                    // Smaller value to the left, otherwise right
+                    // Select target left node if a smaller value, otherwise right node
                     let target_node = if value < *key {
                         &mut self.left
                     } else {
                         &mut self.right
                     };
 
+                    // At target node, match on the value
                     match target_node {
-                        Some(ref mut node) => {
+                        Some(node) => {
+                            // Recursively insert node
                             node.insert(value)
                         },
                         None => {
+                            // Create new subtree at empty node and recursively insert node.
+                            // Update target node to point to the new subtree.
                             let mut node = BinarySearchTree::new();
                             node.insert(value);
                             *target_node = Some(Box::new(node));
-                        },
+                        }
                     }
-                },
+                }
             }
         }
     }
 
-    // Return an iterator which iterates in order
-    // of smallest to greatest
+    // Return an iterator which iterates in order of smallest to largest
     pub fn iter(&self) -> impl Iterator<Item = &T> {
         BinarySearchTreeIter::new(self)
     }
 
+    // Search tree for specified value
+    pub fn search(&self, value: &T) -> bool {
+        match &self.value {
+            Some(key) => {
+                match key.cmp(value) {
+                    Ordering::Equal => {
+                        true
+                    },
+                    Ordering::Greater => {
+                        match &self.left {
+                            Some(node) => node.search(value),
+                            None => false,
+                        }
+                    },
+                    Ordering::Less => {
+                        match &self.right {
+                            Some(node) => node.search(value),
+                            None => false,
+                        }
+                    }
+                }
+            },
+            None => false,
+        }
+    }
+
+    // Retrieve the smallest value
+    pub fn minimum(&self) -> Option<&T> {
+        // Traverse smallest values from the left
+        match &self.left {
+            Some(node) => node.minimum(),
+            None => self.value.as_ref(),
+        }
+    }
+
+    // Retrieve the largest value
+    pub fn maximum(&self) -> Option<&T> {
+        // Traverse largest values from the right
+        match &self.right {
+            Some(node) => node.maximum(),
+            None => self.value.as_ref(),
+        }
+    }
 }
 
-// Iterator for binary search tree
+// Declare binary search tree iterator
 struct BinarySearchTreeIter<'a, T>
 where
     T: Ord,
@@ -90,16 +137,19 @@ where
     stack: Vec<&'a BinarySearchTree<T>>,    
 }
 
+// Implementation of binary earch tree iterator
 impl<'a, T> BinarySearchTreeIter<'a, T>
 where
     T: Ord,
 {
-    pub fn new() {
+    // Ctor references an existing tree
+    pub fn new(tree: &'a BinarySearchTree<T>) -> BinarySearchTreeIter<'a, T> {
         let mut iter = BinarySearchTreeIter { stack: vec![tree] };
         iter.stack_push_left();
         iter
     }
 
+    // Helper to traverse all left values and push then on the stack
     fn stack_push_left(&mut self) {
         while let Some(child) = &self.stack.last().unwrap().left {
             self.stack.push(child);
@@ -107,22 +157,61 @@ where
     }
 }
 
+// Implementation of binary earch tree iterator in order of smallest to largest
 impl<'a, T> Iterator for BinarySearchTreeIter<'a, T>
 where
     T: Ord,
 {
     type Item = &'a T;
 
-}
+    // Iteror next method to rturn node value
+    fn next(&mut self) -> Option<&'a T> {
+        if self.stack.is_empty() {
+            None
+        } else {
+            // Take all values from the stack
+            let node = self.stack.pop().unwrap();
 
+            // If the node has a right value, then push that onto the stack
+            if node.right.is_some() {
+                self.stack.push(node.right.as_ref().unwrap().deref());
+                self.stack_push_left();
+            }
+            node.value.as_ref()
+        }
+    }
+}
 
 
 pub fn run_lesson() {
     println!("\nSection 24:");
 
     // Create binary search for integers
-    let mut int_bst = BinarySearchTree::new();
-    int_bst.insert(1);
-    int_bst.insert(3);
-    int_bst.insert(5);
+    let mut int_tree: BinarySearchTree<i32> = BinarySearchTree::new();
+    int_tree.insert(1);
+    int_tree.insert(42);
+    int_tree.insert(19);
+    int_tree.insert(-5);
+    int_tree.insert(25);
+
+    // Test iterator - expect smallest to largest
+    let mut int_tree_iter = BinarySearchTreeIter::new(&int_tree);
+    loop {
+        match int_tree_iter.next() {
+            Some(value) => {
+                //let value = node.unwrap();
+                println!("value:{}", value);
+            },
+            None => break
+        }
+    }
+
+    // Test search
+    assert_eq!(int_tree.search(&42), true);
+    assert_eq!(int_tree.search(&0), false);
+
+    // Test minimum, maximum
+    assert_eq!(int_tree.minimum(), Some(&-5));
+    assert_eq!(int_tree.maximum(), Some(&42));
+
 }
