@@ -79,4 +79,7 @@ pub fn depth_first_search(graph: &Graph, root: Vertex, objective: Vertex) -> Opt
 pub fn run_lesson() {
     println!("\nSection 27:");
 
+    let vertices = vec![1, 2, 3, 4, 5, 6, 7]);
+    // let mut graph = Graph::new();
+
 }
