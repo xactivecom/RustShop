@@ -24,8 +24,8 @@ Download and run wasm-pack installer:
 Follow the procedure: https://developer.mozilla.org/en-US/docs/WebAssembly/Guides/Rust_to_Wasm
 
 Create a new WASM project
-    % cargo new --lib hello-wasm
-    % cd hello-wasm
+    % cargo new --lib game-of-life
+    % cd game-of-life
 
 Replace the src/lib.rs file with contents in this project.
 
@@ -33,18 +33,12 @@ Edit the Cargo.toml with these:
 - library crate-type = ["cdylib"] for Cargo and Rust linkage
 - dependency "wasm-bindgen" = "0.2"
 
-# Option 1: Build for Hosted
-Build the project into a webassembly module for the hosting:
-    % wasm-pack build --target web
-
-Create a index.html that invokes the webassembly module and run the hostin server .
-
-# Option 2: Build for NPM Bundling
+# Build for NPM Bundling
 Build the project into a bundlable webassembly:
     % wasm-pack build --target bundler
 
 Create subfolder for NPM bundling and dependency on webassembly:
-    % mkdir site && cd site
+    % mkdir www && cd www
     % npm i ../pkg
 
 Install the webpack v5 dependencies:

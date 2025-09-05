@@ -1,0 +1,5 @@
+# Local Mac OS
+**/.DS_Store
+
+# Distribution / packaging
+/node_modules/
