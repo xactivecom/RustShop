@@ -13,14 +13,14 @@ The project structure follows the course outline:
 - Section 8: vector, heap, map
 - Section 9: error handling
 - Section 10: skipped
-- Section 11: command-line
+- Section 11: command-line, *see cmd_app crate project
 - Section 12: iterator, closure
 - Section 13: Box, Rc, Arc pointers
 - Section 14: spawn, channel, mutex
 - Section 15: macros
 - Section 16: skipped
 - Section 17: async, await, *see chat crate project
-- Section 18: *see wasm crate project
+- Section 18: *see wasm_app crate project
 - Section 19: skipped
 - Section 20: recursion
 - Section 21: sorting algorithms
