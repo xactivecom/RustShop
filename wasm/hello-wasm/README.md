@@ -53,7 +53,8 @@ Build the project into a webassembly module for the hosting:
     % wasm-pack build --target web
 ```
 
-Create a index.html that invokes the webassembly module and run the hostin server .
+Create a index.html that invokes the webassembly module and run with a local hosting HTTP server. See ./index.html example.
+
 
 # Option 2: Build for NPM Bundling
 Build the project into a bundlable webassembly:
