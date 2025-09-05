@@ -20,7 +20,7 @@ The project structure follows the course outline:
 - Section 15: macros
 - Section 16: skipped
 - Section 17: async, await, *see chat crate project
-- Section 18: *see wasm_app crate project
+- Section 18: *see wasm crate projects
 - Section 19: skipped
 - Section 20: recursion
 - Section 21: sorting algorithms
@@ -29,5 +29,6 @@ The project structure follows the course outline:
 - Section 24: binary search tree
 - Section 25: skipped
 - Section 26: directed and undirected graphs
-- Section 27: TODO: graph algorithms
+- Section 27a: DFS, BFS graph algorithms
+- Section 27b: Dijkstra graph algorithm
 - Section 28: TODO: minimum spanning tree

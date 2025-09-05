@@ -19,7 +19,8 @@ mod section_22;
 mod section_23;
 mod section_24;
 mod section_26;
-mod section_27;
+mod section_27a;
+mod section_27b;
 
 fn main() {
     // Course section 2
@@ -83,5 +84,6 @@ fn main() {
     // section_26::run_lesson();
 
     // Course Section 27
-    section_27::run_lesson();
+    section_27a::run_lesson();
+    section_27b::run_lesson();
 }
