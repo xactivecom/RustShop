@@ -10,3 +10,4 @@ regex = "1"
 text-colorizer = "1"
 macros = { path = "../macros" }
 async-std = "1"
+disjoint-sets = "0.4.2"
