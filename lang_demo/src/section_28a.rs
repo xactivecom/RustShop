@@ -1,5 +1,5 @@
 ///////////////////////////////
-// Course Section 28
+// Course Section 28a
 ///////////////////////////////
 
 use disjoint_sets::UnionFind;
@@ -21,8 +21,9 @@ struct Edge {
 type Graph = Vec<Vec<Edge>>;
 
 fn edges_by_weight(graph: &Graph) -> Vec<(Node, Node, Weight)> {
-    let mut edges = vec![];
 
+    // Add graph edges
+    let mut edges = vec![];
     for (src, dest) in graph.iter().enumerate() {
         for edge in dest {
             edges.push(( src, edge.dest, edge.weight ));
@@ -36,7 +37,8 @@ fn edges_by_weight(graph: &Graph) -> Vec<(Node, Node, Weight)> {
     edges
 }
 
-fn mst(graph: &Graph) -> Vec<(Node, Node)> {
+// Kruska's MST algorithm
+fn mst_kruska(graph: &Graph) -> Vec<(Node, Node)> {
     let mut result = vec![];
 
     // Check if the graph contains cycles
@@ -57,6 +59,33 @@ fn mst(graph: &Graph) -> Vec<(Node, Node)> {
 pub fn run_lesson() {
     println!("\nSection 28:");
 
-    let mut graph = ;
-    mst(&graph);
+    // Populate weighted graph
+    let graph = vec![
+        vec![ // Node 0
+            Edge { dest: 1, weight: 3 },
+            Edge { dest: 3, weight: 6 },
+            Edge { dest: 5, weight: 1 },
+        ],
+        vec![ // Node 1
+            Edge { dest: 3, weight: 5 },
+            Edge { dest: 5, weight: 4 },
+            Edge { dest: 2, weight: 1 },
+        ],
+        vec![ // Node 2
+            Edge { dest: 3, weight: 2 },
+            Edge { dest: 4, weight: 3 },
+        ],
+        vec![ // Node 3
+            Edge { dest: 4, weight: 7 },
+        ],
+        vec![ // Node 4
+            Edge { dest: 5, weight: 2 },
+        ],
+        vec![ // Node 5
+        ]
+    ];
+
+    // Test Kruska's MST
+    let mst_order= vec![(0, 5), (1, 2), (2, 3), (4, 5), (0, 1)];
+    assert_eq!(mst_kruska(&graph), mst_order);
 }

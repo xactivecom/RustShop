@@ -31,4 +31,5 @@ The project structure follows the course outline:
 - Section 26: directed and undirected graphs
 - Section 27a: DFS, BFS graph algorithms
 - Section 27b: Dijkstra graph algorithm
-- Section 28: minimum spanning tree (MST)
+- Section 28a: Krushkal's minimum spanning tree
+- Section 28b: Prim's minimum spanning tree

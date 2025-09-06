@@ -181,12 +181,12 @@ pub fn run_lesson() {
 
     // Rayon testing
     let timer_1 = Instant::now();
-    factorial(30000);
+    factorial(3000);
     let time_1 = timer_1.elapsed();
     println!("single factorial time:{:?}", time_1);
 
     let timer_2 = Instant::now();
-    multi_factorial(30000);
+    multi_factorial(3000);
     let time_2 = timer_2.elapsed();
     println!("multi factorial time:{:?}", time_2);
 

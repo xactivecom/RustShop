@@ -44,6 +44,6 @@ pub fn run_lesson() {
     // let file = File::open(TEST_FILE).expect("Error opening file");
 
     // Test error propagation
-    let test = file_open();
-    test.unwrap();
+    // let test = file_open();
+    // test.unwrap();
 }
